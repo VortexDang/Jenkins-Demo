@@ -1,0 +1,20 @@
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: bentin345
+      MYSQL_DATABASE: mysql
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: bentin345
+      MYSQL_DATABASE: mysql
+    volumes:
+      - ./database:/docker-entrypoint-initdb.d
