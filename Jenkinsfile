@@ -8,8 +8,8 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
-            }
+                nodejs(nodeJSInstallationName: 'Built-In Node') {
+                sh 'npm install'            }
         }
 
         stage('Package/Push Image') {
