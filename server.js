@@ -1,15 +1,20 @@
 const express = require("express");
 const mysql = require("mysql");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const app = express();
 const port = 3000;
 
+console.log("env",process.env.MYSQL_DATABASE)
+
 function handleDisconnect() {
   const db = mysql.createConnection({
-    host: process.env.MYSQL_HOST || "127.0.0.1",
+    host: process.env.MYSQL_HOST || "localhost",
     user: process.env.MYSQL_USER || "root",
     password: process.env.MYSQL_PASSWORD || "bentin345",
-    database: process.env.MYSQL_DATABASE || "cicd_demo",
+    database: process.env.MYSQL_DATABASE || "mysql",
   });
 
   db.connect(function (err) {
