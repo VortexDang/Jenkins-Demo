@@ -8,7 +8,7 @@ pipeline {
 
      tools {
         // Specify the Docker tool by name
-        myDocker 'docker'
+        dockerTool 'myDocker' 
     }
 
     stages {
