@@ -20,7 +20,7 @@ pipeline {
             steps {
                 // Push the built image to DockerHub
                 withDockerRegistry(credentialsId: 'dockerhub', url: 'https://index.docker.io/v1/') {
-                    sh '/usr/bin/docker build -t bentin345/expressjsapp .'
+                    sh 'docker push bentin345/expressjsapp'
                 }
             }
         }
