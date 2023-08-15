@@ -42,7 +42,7 @@ pipeline {
                 // Running MySQL container
                 sh """
                 docker run --name expressjs-mysql --rm --network dev -v expressjs-mysql-data:/var/lib/mysql \
-                -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_LOGIN} -e MYSQL_DATABASE=expressjsdb -d mysql:5.7
+                -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_LOGIN} -e MYSQL_DATABASE=expressjsdb -e MYSQL_HOST=mysql -d mysql:5.7
                 """
                 sh 'sleep 20' // Allow some time for MySQL to initialize
             }
