@@ -6,10 +6,10 @@ pipeline {
         MYSQL_ROOT_LOGIN = credentials('mysql-root-login')
     }
 
-    tools {
-        docker 'Docker'
+    agent {
+        docker { image 'node:18.17.1-alpine3.18' }
     }
-
+    
     stages {
         stage('Build Docker Image for ExpressJS') {
             steps {
