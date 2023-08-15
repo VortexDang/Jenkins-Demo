@@ -6,6 +6,11 @@ pipeline {
         MYSQL_ROOT_LOGIN = credentials('mysql-root-login')
     }
 
+     tools {
+        // Specify the Docker tool by name
+        myDocker 'docker'
+    }
+
     stages {
         stage('Build Docker Image for ExpressJS') {
             steps {
