@@ -27,11 +27,11 @@ pipeline {
                     sh 'docker network create dev || echo "Network dev already exists"'
                     sh 'docker container stop expressjs-mysql || echo "MySQL container does not exist"'
                     sh 'echo y | docker container prune '
-                    sh 'docker volume rm expressjs-mysql-data || echo "No such volume"'
-                    
-                    sh "docker run --name expressjs-mysql --rm --network dev -v expressjs-mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_LOGIN_PSW} -e MYSQL_DATABASE=expressjsdb  -d mysql:8.0 "
+                    sh 'docker volume rm expressjs-mysql-data || echo "No such volume"'                    
+                    sh "docker run --name expressjs-mysql --rm --network dev -v expressjs-mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_LOGIN} -e MYSQL_DATABASE=cicd_demo -d mysql:8.0"
+
                     sh 'sleep 20'
-                    sh "docker exec -i expressjs-mysql mysql --user=root --password=${MYSQL_ROOT_LOGIN_PSW} < script"
+                    sh "docker exec -i expressjs-mysql mysql --user=root --password=${MYSQL_ROOT_LOGIN} < script"
                 }
             }
         }
@@ -47,8 +47,8 @@ pipeline {
                 withEnv([
                     "MYSQL_HOST_NAME=expressjs-mysql",
                     "MYSQL_USER_NAME=root",
-                    "MYSQL_PWD=${MYSQL_ROOT_LOGIN_PSW}",
-                    "MYSQL_DB_NAME=expressjsdb"
+                    "MYSQL_PWD=${MYSQL_ROOT_LOGIN}",
+                    "MYSQL_DB_NAME=cicd_demo"
                 ]) {
                     sh """
                     docker run -d --name expressjs-app --rm -p 3000:3000 --network dev \
