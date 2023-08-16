@@ -1,6 +1,3 @@
-ALTER USER 'root'@'%' IDENTIFIED WITH 'mysql_native_password' BY 'bentin345';
-FLUSH PRIVILEGES;
-
 CREATE DATABASE IF NOT EXISTS cicd_demo;
 
 USE cicd_demo;
@@ -9,3 +6,7 @@ CREATE TABLE items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
 );
+
+ALTER USER 'root'@'%' IDENTIFIED WITH 'mysql_native_password' BY 'bentin345';
+GRANT ALL PRIVILEGES ON cicd_demo.* TO 'root'@'%';
+FLUSH PRIVILEGES;

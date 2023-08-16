@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        MYSQL_ROOT_LOGIN = credentials('mysql-root-login')
         MYSQL_DATABASE_NAME = 'cicd_demo'
     }
 
@@ -38,7 +37,6 @@ pipeline {
             }
         }
 
-
         stage('Deploy ExpressJS App to DEV') {
             steps {
                 echo 'Deploying ExpressJS app'
@@ -47,15 +45,10 @@ pipeline {
                 sh 'docker network create dev || echo "this network exists"'
                 sh 'echo y | docker container prune '
 
-                withEnv([
-                    "MYSQL_HOST_NAME=expressjs-mysql",
-                    "MYSQL_USER_NAME=root",
-                    "MYSQL_PWD=${MYSQL_ROOT_LOGIN}",
-                    "MYSQL_DB_NAME=cicd_demo"
-                ]) {
+                withCredentials([usernamePassword(credentialsId: 'mysql-root-login', usernameVariable: 'MYSQL_USER_NAME', passwordVariable: 'MYSQL_PWD')]) {
                     sh """
                     docker run -d --name expressjs-app --rm -p 3000:3000 --network dev \
-                    -e MYSQL_HOST=$MYSQL_HOST_NAME -e MYSQL_USER=$MYSQL_USER_NAME -e MYSQL_PASSWORD=$MYSQL_PWD -e MYSQL_DATABASE=$MYSQL_DB_NAME \
+                    -e MYSQL_HOST=expressjs-mysql -e MYSQL_USER=$MYSQL_USER_NAME -e MYSQL_PASSWORD=$MYSQL_PWD -e MYSQL_DATABASE=$MYSQL_DATABASE_NAME \
                     bentin345/expressjsapp
                     """
                 }            
