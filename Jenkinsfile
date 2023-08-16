@@ -28,7 +28,7 @@ pipeline {
                     sh 'docker container stop expressjs-mysql || echo "MySQL container does not exist"'
                     sh 'echo y | docker container prune '
                     sh 'docker volume rm expressjs-mysql-data || echo "No such volume"'                    
-                    sh "docker run --name expressjs-mysql --rm --network dev -v expressjs-mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_LOGIN} -e MYSQL_DATABASE=cicd_demo -d mysql:8.0"
+                    sh "docker run --name expressjs-mysql --rm --network dev -v expressjs-mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_LOGIN_PSW} -e MYSQL_DATABASE=cicd_demo -d mysql:8.0"
 
                     sh 'sleep 20'
                     sh "docker exec -i expressjs-mysql mysql --user=root --password=${MYSQL_ROOT_LOGIN} < script"
