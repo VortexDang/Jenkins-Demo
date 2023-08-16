@@ -1,12 +1,10 @@
+### Localhost testing
 GET http://localhost:3000/items
 
-
-###
-
-
+### Localhost testing
 POST http://localhost:3000/items
 Content-Type: application/json
 
 {
-    "name": "Testing 3"
+    "name": "Testing 2"
 }

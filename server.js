@@ -41,6 +41,9 @@ function handleDisconnect() {
 
 const db = handleDisconnect();
 
+app.get("/", (req, res) => {
+ res.json("Successfully, good job!")
+});
 app.get("/items", (req, res) => {
   db.query("SELECT * FROM items", (err, results) => {
     if (err) throw err;
