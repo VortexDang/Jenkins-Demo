@@ -33,7 +33,6 @@ pipeline {
                     ]) {
                         sh "docker run --name expressjs-mysql --rm --network dev -v expressjs-mysql-data:/var/lib/mysql -e MYSQL_ROOT_PASSWORD=$MYSQL_PWD -e MYSQL_DATABASE=cicd_demo -d mysql:8.0"
                     }
-
                     sh 'sleep 20'
                     sh "docker exec -i expressjs-mysql mysql --user=root --password=${MYSQL_ROOT_LOGIN} < script"
                 }
