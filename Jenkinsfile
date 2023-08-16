@@ -37,6 +37,7 @@ pipeline {
                     docker run --name expressjs-mysql --network dev -v expressjs-mysql-data:/var/lib/mysql \
                     -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_LOGIN} -e MYSQL_DATABASE=expressjsdb -d mysql:5.7
                     """
+                    // Wait for MySQL to be ready
                     for(int i = 0; i < 30; i++) {
                         def status = sh(script: "docker exec expressjs-mysql mysqladmin ping --silent", returnStatus: true)
                         if (status == 0) {
@@ -45,9 +46,14 @@ pipeline {
                         echo "Waiting for MySQL to be ready..."
                         sh 'sleep 5'
                     }
+
+                    // Assuming script.sql is in the same directory as the Jenkinsfile, if not adjust the path
+                    sh "docker cp script.sql expressjs-mysql:/script.sql"
+                    sh "docker exec -i expressjs-mysql mysql --user=root --password=${MYSQL_ROOT_LOGIN} < /script.sql"
                 }
             }
         }
+
 
         stage('Deploy ExpressJS App to DEV') {
             steps {
