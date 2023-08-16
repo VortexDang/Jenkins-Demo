@@ -33,10 +33,10 @@ pipeline {
                     sh 'docker container stop expressjs-mysql || echo "MySQL container does not exist"'
                     sh 'docker container rm expressjs-mysql || echo "MySQL container was not removed"'
                     sh 'docker volume rm expressjs-mysql-data || echo "No such volume"'
-                    sh "
+                    sh """
                     docker run --name expressjs-mysql --rm --network dev -v expressjs-mysql-data:/var/lib/mysql \
                     -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_LOGIN_PSW} -e MYSQL_DATABASE=expressjsdb -d mysql:5.7
-                    "
+                    """
                     sh 'sleep 20'
                     sh "docker exec -i expressjs-mysql mysql --user=root --password=${MYSQL_ROOT_LOGIN_PSW} < script"
                 }
@@ -50,7 +50,7 @@ pipeline {
                 sh 'docker container stop expressjs-app || echo "ExpressJS app container does not exist"'
                 sh 'docker container rm expressjs-app || echo "ExpressJS app container was not removed"'
                 sh """
-                docker run -d --name expressjs-app --rm -p 3000:3000 --network dev --link expressjs-mysql:mysql \
+                docker run -d --name --rm expressjs-app -p 3000:3000 --network dev --link expressjs-mysql:mysql \
                 -e MYSQL_HOST=mysql -e MYSQL_USER=root -e MYSQL_PASSWORD=${MYSQL_ROOT_LOGIN} -e MYSQL_DATABASE=expressjsdb \
                 bentin345/expressjsapp
                 """
