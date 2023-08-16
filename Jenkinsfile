@@ -34,7 +34,7 @@ pipeline {
                     sh 'docker container rm expressjs-mysql || echo "MySQL container was not removed"'
                     sh 'docker volume rm expressjs-mysql-data || echo "No such volume"'
                     sh """
-                    docker run --name expressjs-mysql --rm --network dev -v expressjs-mysql-data:/var/lib/mysql \
+                    docker run --name expressjs-mysql --network dev -v expressjs-mysql-data:/var/lib/mysql \
                     -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_LOGIN} -e MYSQL_DATABASE=expressjsdb -d mysql:5.7
                     """
                     for(int i = 0; i < 30; i++) {
@@ -56,7 +56,7 @@ pipeline {
                 sh 'docker container stop expressjs-app || echo "ExpressJS app container does not exist"'
                 sh 'docker container rm expressjs-app || echo "ExpressJS app container was not removed"'
                 sh """
-                docker run -d --rm --name expressjs-app -p 3000:3000 --network dev --link expressjs-mysql:mysql \
+                docker run -d --name expressjs-app -p 3000:3000 --network dev --link expressjs-mysql:mysql \
                 -e MYSQL_HOST=mysql -e MYSQL_USER=root -e MYSQL_PASSWORD=${MYSQL_ROOT_LOGIN} -e MYSQL_DATABASE=expressjsdb \
                 bentin345/expressjsapp
                 """
@@ -66,10 +66,6 @@ pipeline {
 
     post {
         always {
-            sh """
-            docker stop expressjs-mysql || true
-            docker stop expressjs-app || true
-            """
             cleanWs()
         }
     }
