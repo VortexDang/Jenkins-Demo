@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        MYSQL_ROOT_LOGIN = credentials('mysql-root-login')
         MYSQL_DATABASE_NAME = 'cicd_demo'
     }
 
@@ -49,7 +50,7 @@ pipeline {
                 withEnv([
                     "MYSQL_HOST_NAME=expressjs-mysql",
                     "MYSQL_USER_NAME=root",
-                    "MYSQL_PWD=$MYSQL_PWD",
+                    "MYSQL_PWD=${MYSQL_ROOT_LOGIN}",
                     "MYSQL_DB_NAME=cicd_demo"
                 ]) {
                     sh """
