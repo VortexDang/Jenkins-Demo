@@ -48,12 +48,10 @@ pipeline {
                 echo 'Deploying ExpressJS app'
                 sh 'docker image pull bentin345/expressjsapp'
                 sh 'docker container stop expressjs-app || echo "ExpressJS app container does not exist"'
-                sh 'docker container rm expressjs-app || echo "ExpressJS app container was not removed"'
-                sh """
-                docker run -d --name --rm expressjs-app -p 3000:3000 --network dev --link expressjs-mysql:mysql \
-                -e MYSQL_HOST=mysql -e MYSQL_USER=root -e MYSQL_PASSWORD=${MYSQL_ROOT_LOGIN} -e MYSQL_DATABASE=expressjsdb \
-                bentin345/expressjsapp
-                """
+                sh 'docker network create dev || echo "this network exists"'
+                sh 'echo y | docker container prune '
+
+                sh 'docker container run -d --rm --name expressjs-app -p 3000:3000 --network dev bentin345/expressjsapp'
             }
         }
     }
