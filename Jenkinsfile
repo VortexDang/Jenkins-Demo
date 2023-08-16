@@ -49,7 +49,18 @@ pipeline {
                 sh 'docker network create dev || echo "this network exists"'
                 sh 'echo y | docker container prune '
 
-                sh 'docker container run -d --rm --name expressjs-app -p 3000:3000 --network dev bentin345/expressjsapp'
+                withEnv([
+                    "MYSQL_HOST_NAME=expressjs-mysql",
+                    "MYSQL_USER_NAME=root",
+                    "MYSQL_PWD=${MYSQL_ROOT_LOGIN_PSW}",
+                    "MYSQL_DB_NAME=expressjsdb"
+                ]) {
+                    sh """
+                    docker run -d --name expressjs-app --rm -p 3000:3000 --network dev \
+                    -e MYSQL_HOST=$MYSQL_HOST_NAME -e MYSQL_USER=$MYSQL_USER_NAME -e MYSQL_PASSWORD=$MYSQL_PWD -e MYSQL_DATABASE=$MYSQL_DB_NAME \
+                    bentin345/expressjsapp
+                    """
+                }            
             }
         }
     }
