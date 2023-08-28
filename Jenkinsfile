@@ -17,12 +17,12 @@ pipeline {
             steps {
                 script {
                     withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', credentialsId: 'awsCredentials', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]) {
-                        sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin $AWS_ECR_URL"
-                    }
+                        sh "docker login -u AWS -p \$(aws ecr get-login-password --region us-east-1) $AWS_ECR_URL"
 
-                    sh 'docker build -t pipeline-demo .'
-                    sh 'docker tag pipeline-demo:latest $AWS_ECR_URL:latest'
-                    sh 'docker push $AWS_ECR_URL:latest'
+                        sh 'docker build -t pipeline-demo .'
+                        sh "docker tag pipeline-demo:latest $AWS_ECR_URL:latest"
+                        sh "docker push $AWS_ECR_URL:latest"
+                    }
                 }
             }
         }
